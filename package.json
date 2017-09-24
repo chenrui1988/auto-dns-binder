@@ -1,0 +1,16 @@
+{
+  "name": "auto-dns-binding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chen Rui",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^1.7.3",
+    "normalize-url": "^1.9.1"
+  }
+}
