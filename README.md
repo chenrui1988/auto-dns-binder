@@ -12,15 +12,16 @@
 
 程序每半小时检测一次，正在执行前，需要配置环境变量：  
 
-1. DOMAIN， 要绑定的域名，like pi.arui.me  
-2. ACCESS_KEY, 阿里云账户的Access Key ID  
-3. ACCESS_SECRET，阿里账户的Access Secret  
+1. ADB_DOMAIN， 要绑定的域名，like pi.arui.me  
+2. ADB_ACCESS_KEY, 阿里云账户的Access Key ID  
+3. ADB_ACCESS_SECRET，阿里账户的Access Secret  
+4. ADB_INTERVAL_SECOND，检测间隔，单位秒，默认60s
 
 配置完成，执行命令：  
 ``` 
 $ npm install
 $ npm start
-run auto dns binding at 2017-09-24T14:27:23.389Z
+run auto dns binder at 2017-09-24T14:27:23.389Z
 get unicom ip : [114.245.192.67] equals with last unicom ip!
 ```
 
@@ -28,7 +29,7 @@ get unicom ip : [114.245.192.67] equals with last unicom ip!
 
 编译镜像，并部署到Docker Swarm环境中，执行命令：
 ```
-cd auto-dns-binding 
-docker build . -t 'auto-dns-binding:1.0' -t 'auto-dns-binding:latest'
-docker service create --name anto-dns-binding -e ACCESS_KEY=xxx -e ACCESS_SECRET=xxx -e DOMAIN=xxxx anto-dns-binding:latest 
+cd auto-dns-binder 
+docker build . -t 'auto-dns-binder:1.0' -t 'auto-dns-binder:latest'
+docker service create --name anto-dns-binder -e ACCESS_KEY=xxx -e ACCESS_SECRET=xxx -e DOMAIN=xxxx anto-dns-binder:latest 
 ```

@@ -1,5 +1,5 @@
 {
-  "name": "auto-dns-binding",
+  "name": "auto-dns-binder",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

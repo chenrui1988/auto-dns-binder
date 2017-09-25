@@ -5,9 +5,10 @@
  * to update dns resolve recorder
  *
  * Environment Variable Configure Before Run This Program:
- * 1. ACCESS_KEY, Ali Yun access key id
- * 2. ACCESS_SECRET, Ali Yun access secret
- * 3. DOMAIN, the domain used to bind,like pi.arui.me
+ * 1. ADB_ACCESS_KEY, Ali Yun access key id
+ * 2. ADB_ACCESS_SECRET, Ali Yun access secret
+ * 3. ADB_DOMAIN, the domain used to bind,like pi.arui.me
+ * 4. ADB_INTERVAL_SECOND, the domain used to bind,like pi.arui.me
  *
  * @author Chen Rui
  */
@@ -15,12 +16,17 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const process = require('process');
 const crypto = require('crypto');
-const alidns = require('./ali-dns-api')
+const AliDnsAPI = require('./ali-dns-api')
 
-const IP_CHECK_URL = 'http://1212.ip138.com/ic.asp';
+const IP_CHECK_URL = 'http://www.net.cn/static/customercare/yourip.asp';
 const IP_PATTERN = /\b(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})\b/;
 
-const ALI_DOMAIN = process.env.DOMAIN;
+const ALI_DOMAIN = process.env.ADB_DOMAIN;
+const ALI_ACCESS_KEY = process.env.ADB_ACCESS_KEY;
+const ALI_ACCESS_SECRET = process.env.ADB_ACCESS_SECRET + '&';
+const INTERVAL_SECOND = process.env.ADB_INTERVAL_SECOND ? process.env.ADB_INTERVAL_SECOND : 60;
+
+const alidns = AliDnsAPI(ALI_ACCESS_KEY, ALI_ACCESS_SECRET);
 
 /**
  * Get Unicom Publish IP.
@@ -50,7 +56,7 @@ const bindDnsResolve = function (ip) {
             return Promise.reject('mis dns record');
         }
     }).then(function (record) {
-        console.log("begin binding " + ip + " to record " + record.RecordId);
+        console.log("begin binder " + ip + " to record " + record.RecordId);
         return alidns.updateDomainRecord(record.RecordId, record.RR, record.Type, ip);
     }).then(function (res) {
         console.log(res);
@@ -59,9 +65,9 @@ const bindDnsResolve = function (ip) {
     })
 }
 
-const autoDnsBinding = function () {
+const autoDnsBinder = function () {
     const localIp = fs.readFileSync('./ip.txt', 'utf-8');
-    console.log("run auto dns binding at " + new Date().toISOString());
+    console.log("run auto dns binder at " + new Date().toISOString());
     getUnicomPublishIP()
         .then(function (ip) {
             if (ip === localIp) {
@@ -71,7 +77,11 @@ const autoDnsBinding = function () {
             console.log("unicom ip change, new unicom ip : [" + ip + "]!");
             return bindDnsResolve(ip);
         }).then(undefined, function (error) {
-            return error.text();
+            if(error.text) {
+                return error.text();
+            } else {
+                return error;
+            }
         }).then(function (body) {
             if(body) {
                 console.error(body);
@@ -79,5 +89,4 @@ const autoDnsBinding = function () {
         });
 }
 
-autoDnsBinding();
-setInterval(autoDnsBinding, 3600000);
+setInterval(autoDnsBinder, INTERVAL_SECOND * 1000);
