@@ -31,5 +31,5 @@ get unicom ip : [114.245.192.67] equals with last unicom ip!
 ```
 cd auto-dns-binder 
 docker build . -t 'auto-dns-binder:1.0' -t 'auto-dns-binder:latest'
-docker service create --name anto-dns-binder -e ACCESS_KEY=xxx -e ACCESS_SECRET=xxx -e DOMAIN=xxxx anto-dns-binder:latest 
+docker service create --name anto-dns-binder -e ADB_ACCESS_KEY=xxx -e ADB_ACCESS_SECRET=xxx -e ADB_DOMAIN=xxx registry.cn-beijing.aliyuncs.com/kv/auto-dns-binder:1.0
 ```
